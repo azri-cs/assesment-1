@@ -8,6 +8,8 @@
                     <div class="mb-4">
                         <p class="text-gray-700 text-sm font-bold mb-2">Created By:</p>
                         <p class="text-gray-700">{{ $purchase->owner->name }}</p>
+                        <p class="text-gray-700">{{ $purchase->owner->email }}</p>
+                        <p class="text-gray-700">{{ $purchase->owner->phone_number }}</p>
                     </div>
                     <div class="mb-4">
                         <p class="text-gray-700 text-sm font-bold mb-2">Status:</p>
