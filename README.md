@@ -46,6 +46,9 @@ Aside from idea for backend, I'm also using AI to generate the basic or complex 
    ```
 
 5. Copy the `.env.example` file to `.env` and configure your database settings.
+   ```
+   cp .env.example .env
+   ```
 
 6. Generate application key:
    ```
