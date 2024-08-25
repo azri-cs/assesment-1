@@ -13,6 +13,14 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @stack('header')
+        <script>
+            if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.querySelector('html').classList.add('dark');
+            } else {
+                document.querySelector('html').classList.remove('dark');
+            }
+        </script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -32,5 +40,42 @@
                 {{ $slot }}
             </main>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const lightSwitches = document.querySelectorAll('.light-switch');
+
+                if (lightSwitches.length > 0) {
+                    lightSwitches.forEach((lightSwitch, i) => {
+
+                        if (localStorage.getItem('dark-mode') === 'true') {
+                            lightSwitch.checked = true;
+                            document.documentElement.classList.add('dark');
+                        }
+
+                        lightSwitch.addEventListener('change', function() {
+                            const { checked } = this;
+
+                            lightSwitches.forEach((el, n) => {
+                                if (n !== i) {
+                                    el.checked = checked;
+                                }
+                            });
+
+                            if (checked) {
+                                document.documentElement.classList.add('dark');
+                                localStorage.setItem('dark-mode', 'true');
+                            } else {
+                                document.documentElement.classList.remove('dark');
+                                localStorage.setItem('dark-mode', 'false');
+                            }
+                        });
+
+                    });
+                } else {
+                    console.log('No light switches found');
+                }
+            });
+        </script>
+        @stack('footer')
     </body>
 </html>
