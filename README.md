@@ -18,6 +18,15 @@ The basic idea came by myself, but I'm using AI tool such as [Claude](https://cl
 
 Aside from idea for backend, I'm also using AI to generate the basic or complex layout for frontend.
 
+## Strategies
+1. Using queued reading to process the import in the background.
+2. Using batch insert to limit the amount of queries per batch with batch size of 5000.
+3. Using chunk reading to read the spreadsheets in chunks with chunk size of 5000.
+4. Inserting the data in chunks of 5000 records at a time.
+5. Using query builder `DB` instead of Eloquent ORM.
+6. Using `map()` function instead of `foreach` loop.
+7. Manually setting `created_at` & `updated_at` columns instead of relying on Eloquent.
+
 ## Requirements
 
 - PHP 8.2+

@@ -3,26 +3,33 @@
 namespace App\Imports;
 
 use App\Models\DebtNotification;
+use DB;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class DebtNotificationImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQueue
+class DebtNotificationImport implements ToCollection, WithHeadingRow, WithChunkReading, ShouldQueue
 {
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
-    public function model(array $row)
+    public function collection(Collection $collection): void
     {
-        return new DebtNotification([
-            'mobile_number' => $row['mobile_number'],
-            'text1' => $row['text1'],
-            'amount' => $row['amount'],
-            'text2' => $row['text2']
-        ]);
+        $chunks = $collection->chunk(5000);
+
+        foreach ($chunks as $chunk) {
+            $records = $chunk->map(function ($row) {
+                return [
+                    'mobile_number' => $row['mobile_number'],
+                    'text1' => $row['text1'],
+                    'amount' => $row['amount'],
+                    'text2' => $row['text2'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            })->toArray();
+
+            DB::table('debt_notifications')->insert($records);
+        }
     }
 
     public function batchSize(): int
